@@ -1,0 +1,12 @@
+# 実際のパスワードを含む設定ファイルは公開しない
+config.ini
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
