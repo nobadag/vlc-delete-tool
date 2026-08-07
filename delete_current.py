@@ -82,6 +82,7 @@ def delete_current_file():
             return
 
         path = uri_to_path(current["uri"])
+        item_id = current.get("id")
 
         # 次の曲へ進めてファイルロックを解除
         requests.get(
@@ -91,6 +92,16 @@ def delete_current_file():
             timeout=3,
         )
         time.sleep(0.3)
+
+        # プレイリストからも項目を削除(残したままだとフォルダ再生時に
+        # 「ファイルが見つかりません」エラーの原因になる)
+        if item_id is not None:
+            requests.get(
+                f"http://{VLC_HOST}:{VLC_PORT}/requests/status.json",
+                params={"command": "pl_delete", "id": item_id},
+                auth=AUTH,
+                timeout=3,
+            )
 
         send2trash(path)
         print("ゴミ箱に移動しました:", path)
